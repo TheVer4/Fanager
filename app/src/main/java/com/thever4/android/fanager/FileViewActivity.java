@@ -15,10 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FileViewActivity extends AppCompatActivity {
 
@@ -27,30 +30,36 @@ public class FileViewActivity extends AppCompatActivity {
     String ENTERED_FILENAME;
     final String LOG_TAG = "FANAGER"; //LOG_TAG
     File file; //Main File manager
-    ArrayList<String> files; //Array of string of file names that available in `file`
-    ArrayAdapter<String> arrayAdapter; //Adapter to ListView on layout
+    HashMap<String, Object> hmfiles; //Array of string of file names that available in `file`
+    ArrayList<HashMap<String, Object>> alfiles;
+    SimpleAdapter arrayAdapter; //Adapter to ListView on layout
     long back_pressed; //long type variable to check exit
+    String[] fromKey;
+    int[] toId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //Traditional onCreate
         setContentView(R.layout.activity_file_view); //Setting View
-        files = new ArrayList<String>(); //Declaring `files`
+        alfiles = new ArrayList< HashMap<String, Object> >();
+        fromKey = new String[] { "type", "item"};
+        toId = new int[] {R.id.fstypeIV, R.id.filesTV};
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Block screen orientation if VERTICAL position.
 
+        Intent intent = getIntent();
+        if(intent.getStringExtra("CURRENT_DIR") == null) loadArr("/"); //Using method `loadArr(String path)` with default value
+        else loadArr(intent.getStringExtra("CURRENT_DIR")); //Using method `loadArr(String path)` with intent value
 
-        loadArr("/"); //Using method `loadArr(String path)` with default value
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
-        arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.adapterview, files); //Declaring of Adapter `arrayAdapter`
+        arrayAdapter = new SimpleAdapter(getApplicationContext(), alfiles, R.layout.adapterview, fromKey, toId); //Declaring of Adapter `arrayAdapter`
         ListView lv = (ListView) findViewById(R.id.fileListView); //Declaring of ListView on Layout with varName `lv`
-        arrayAdapter.setNotifyOnChange(true); //Editing `arrayAdapter` class parameters
         lv.setAdapter(arrayAdapter); //Installing adapter to `lv`
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() { //onItemClickListeners setting
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                goDirDown(files.get(i)); //Using method `goDirDown(String item)`
+                goDirDown((String) alfiles.get(i).get("item")); //Using method `goDirDown(String item)`
                 arrayAdapter.notifyDataSetChanged(); //Reloading ListView values
             }
         });
@@ -254,11 +263,17 @@ public class FileViewActivity extends AppCompatActivity {
 
     private void loadArr(String path) { //`loadArr(String path)` method is used to reload the `files` array
         file = new File(path); //reload `file` variable
+
         if (file.isDirectory()) { //WE NEED MORE SAFETY!!!
-            if (files.isEmpty() != true) files.clear(); //Yes! It looks oddly, but inoffensively
+            if (!alfiles.isEmpty()) alfiles.clear(); //Yes! It looks oddly, but inoffensively
             if (file.list() != null) { //FOREACH, BABY!!!
                 for (String item : file.list()) {
-                    files.add(item);
+                    hmfiles = new HashMap<String, Object>();
+                    hmfiles.put("item", item);
+                    if (file.toString().equals("/")) hmfiles.put("type" ,new File(file.toString() + item).isDirectory()?R.drawable.directory:R.drawable.file);
+                    else hmfiles.put("type", new File(file.toString() + "/" + item).isDirectory()?R.drawable.directory:R.drawable.file);
+
+                    alfiles.add(hmfiles);
                 }
                 changeMenu(file);
                 CURRENT_DIR = file;
@@ -270,7 +285,7 @@ public class FileViewActivity extends AppCompatActivity {
                 Log.e(LOG_TAG, "" + ex);
             }
         }
-        else Toast.makeText(getApplicationContext(), "FILE!!!" + path, Toast.LENGTH_LONG).show();
+        else Toast.makeText(getApplicationContext(), "This is file. Pls contact with developer! (It's an error)" + path, Toast.LENGTH_LONG).show();
         return; //Sorry! You must to go back of algorithm hierarchy
     }
 

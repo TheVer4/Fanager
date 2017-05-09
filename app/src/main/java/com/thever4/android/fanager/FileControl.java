@@ -3,7 +3,6 @@ package com.thever4.android.fanager;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 /**
  * Created by thever4 on 02.04.17.

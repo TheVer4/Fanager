@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class AboutAppActivity extends AppCompatActivity {
 
@@ -21,8 +22,8 @@ public class AboutAppActivity extends AppCompatActivity {
 
 
 
-
-    public void goback(View view) {
+    @Override
+    public void onBackPressed() {
         Intent intent1 = new Intent(this, FileViewActivity.class);
         intent1.putExtra("CURRENT_DIR", dir);
         startActivity(intent1);
