@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fvpai4"
+        android:title="Hide hidden files" />
+
+    <item
+        android:id="@+id/fvpai5"
+        android:title="About Fanager" />
+</menu>

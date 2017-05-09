@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fvpai1"
+        android:title="Select" />
+
+    <item
+        android:id="@+id/fvpai2"
+        android:title="New file" />
+
+    <item
+        android:id="@+id/fvpai3"
+        android:title="Create folder" />
+
+    <item
+        android:id="@+id/fvpai4"
+        android:title="Hide hidden files" />
+
+    <item
+        android:id="@+id/fvpai5"
+        android:title="About Fanager" />
+
+    <!--fileviewpermissionsavailable-->
+</menu>
