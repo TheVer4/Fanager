@@ -9,7 +9,7 @@ import android.widget.Toast;
 public class AboutAppActivity extends AppCompatActivity {
 
     Intent intent;
-    String dir;
+    static String dir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,8 @@ public class AboutAppActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent1 = new Intent(this, FileViewActivity.class);
-        intent1.putExtra("CURRENT_DIR", dir);
+        /*intent1.putExtra("CURRENT_DIR", dir);*/
         startActivity(intent1);
+        finish();
     }
 }

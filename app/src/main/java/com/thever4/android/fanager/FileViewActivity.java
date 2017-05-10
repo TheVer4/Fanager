@@ -47,9 +47,12 @@ public class FileViewActivity extends AppCompatActivity {
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Block screen orientation if VERTICAL position.
 
-        Intent intent = getIntent();
-        if(intent.getStringExtra("CURRENT_DIR") == null) loadArr("/"); //Using method `loadArr(String path)` with default value
-        else loadArr(intent.getStringExtra("CURRENT_DIR")); //Using method `loadArr(String path)` with intent value
+        /*Intent intent = getIntent();*/
+        if(AboutAppActivity.dir == null) loadArr("/"); //Using method `loadArr(String path)` with default value
+        else {
+            loadArr(AboutAppActivity.dir); //Using method `loadArr(String path)` with intent value
+            AboutAppActivity.dir = null;
+        }
 
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
@@ -66,8 +69,34 @@ public class FileViewActivity extends AppCompatActivity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "Now deleting of files is not available! Sorry :(", Toast.LENGTH_LONG).show();
-                return false;
+                final File file;
+                final String item = (String) alfiles.get(i).get("item");
+                if(CURRENT_DIR.toString().equals("/")) file = new File("/" + item);
+                else file = new File(CURRENT_DIR.toString() + "/" + item);
+                AlertDialog.Builder adb = new AlertDialog.Builder(FileViewActivity.this);
+                adb.setIcon(R.mipmap.ic_launcher);
+                adb.setTitle("Deleting file");
+                adb.setMessage("Are you sure want to delete \"" + item + "\"");
+                adb.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        if(file.delete()) Toast.makeText(getApplicationContext(), "Item \"" + item + "\" deleted successful" , Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(getApplicationContext(), "Error while deleting item. If it directory, it must be empty!", Toast.LENGTH_SHORT).show();
+                        loadArr(CURRENT_DIR.toString());
+                        dialog.dismiss();
+                        arrayAdapter.notifyDataSetChanged();
+                    }
+                });
+                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog ad = adb.create();
+                ad.show();
+
+                return true;
             }
         });
     } //onCreate end
@@ -103,9 +132,12 @@ public class FileViewActivity extends AppCompatActivity {
             case R.id.fvit2:
 
                 break;*/
-            case R.id.fvpai1: //SELECT
 
-                break;
+            /*fvpai - encrypts as File View Permissions Available Id N*/
+
+            /*case R.id.fvpai1: //SELECT
+
+                break;*/
             case R.id.fvpai2: //NEW FILE
                 try {
                     if (CURRENT_DIR.isDirectory()) {
@@ -207,6 +239,7 @@ public class FileViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), AboutAppActivity.class);
                 intent.putExtra("dir", CURRENT_DIR.toString());
                 startActivity(intent);
+                finish();
                 break;
 
         }
@@ -234,7 +267,7 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
     private void exit() { //exit() method to go out the application. It used that "BACK" key is reassigned
-        if (back_pressed + 2000 > System.currentTimeMillis()) super.onBackPressed(); //Genius!!!!!!
+        if (back_pressed + 2000 > System.currentTimeMillis() && CURRENT_DIR.toString().equals("/")) /*super.onBackPressed();*/ exit(); //Genius!!!!!!
         else Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
         back_pressed = System.currentTimeMillis(); //no more! Its so fun :D
     }
@@ -303,4 +336,6 @@ public class FileViewActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Cannot open file", Toast.LENGTH_SHORT).show();
         }*/
     }
+
+
 }

@@ -66,6 +66,8 @@ public class FileControl extends AppCompatActivity {
         else if (extension.equals("css")) return "text/css";
         else if (extension.equals("csv")) return "text/csv";
         else if (extension.equals("xml")) return "text/xml";
+        else if (extension.equals("apk")) return "application/vnd.android.package-archive";
+
         /*** must be continued at newest versions... ****/
         else return "*/*";
     }
