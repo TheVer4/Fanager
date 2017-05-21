@@ -3,7 +3,7 @@
 
     <!--<item
         android:id="@+id/fvpai1"
-        android:title="Select" />-->
+        android:title="Select" />--> <!-- USED IN OLD VERSIONS. NOW IT DELETED -->
 
     <item
         android:id="@+id/fvpai2"
@@ -15,7 +15,7 @@
 
     <item
         android:id="@+id/fvpai4"
-        android:title="Hide hidden files" />
+        android:title="Show hidden files" />
 
     <item
         android:id="@+id/fvpai5"

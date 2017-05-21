@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_options"
     android:layout_width="match_parent"
@@ -9,5 +10,90 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.thever4.android.fanager.OptionsActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout10">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:onClick="goInternal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/internal"
+                android:gravity="center_horizontal"
+                android:id="@+id/imageView4" />
+
+            <TextView
+                android:text="Internal storage"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/textView6" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:onClick="goExternal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/external"
+                android:gravity="center_horizontal"
+                android:id="@+id/imageView6" />
+
+            <TextView
+                android:text="External storage"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/textView7" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:onClick="goFSRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/fsroot"
+                android:gravity="center_horizontal"
+                android:id="@+id/imageView7" />
+
+            <TextView
+                android:text="File system root"
+                android:textColor="#000000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/textView8" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:text="I'm sorry, but in this version of Fanager you can not to add (delete) files or directories in your external storage. It happened because Google has been updated their policy relatively your security. In newest version I will fix it. Please wait more ;D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout10"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:id="@+id/textView9" />
 
 </RelativeLayout>

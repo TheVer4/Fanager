@@ -2,7 +2,6 @@ package com.thever4.android.fanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,14 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +32,8 @@ public class FileViewActivity extends AppCompatActivity {
     long back_pressed; //long type variable to check exit
     String[] fromKey;
     int[] toId;
+    private boolean HIDE_HIDDEN;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +42,13 @@ public class FileViewActivity extends AppCompatActivity {
         alfiles = new ArrayList< HashMap<String, Object> >();
         fromKey = new String[] { "type", "item"};
         toId = new int[] {R.id.fstypeIV, R.id.filesTV};
-
+        HIDE_HIDDEN = true;
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Block screen orientation if VERTICAL position.
 
-        /*Intent intent = getIntent();*/
-        if(AboutAppActivity.dir == null) loadArr("/"); //Using method `loadArr(String path)` with default value
+        Intent intent = getIntent();
+        if(intent.getStringExtra("CURRENT_DIR") == null) loadArr("/"); //Using method `loadArr(String path)` with default value
         else {
-            loadArr(AboutAppActivity.dir); //Using method `loadArr(String path)` with intent value
-            AboutAppActivity.dir = null;
+            loadArr(intent.getStringExtra("CURRENT_DIR")); //Using method `loadArr(String path)` with intent value
         }
 
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -101,11 +98,11 @@ public class FileViewActivity extends AppCompatActivity {
         });
     } //onCreate end
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { //OnCreateOptionsMenu to create ActionBar Menu
         if(writeable) getMenuInflater().inflate(R.menu.fileviewpermissionsavailable, menu);
         else getMenuInflater().inflate(R.menu.fileviewpermissionsnotavailable, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -133,7 +130,7 @@ public class FileViewActivity extends AppCompatActivity {
 
                 break;*/
 
-            /*fvpai - encrypts as File View Permissions Available Id N*/
+            /*fvpai - decrypts as File View Permissions Available Id N*/
 
             /*case R.id.fvpai1: //SELECT
 
@@ -233,7 +230,18 @@ public class FileViewActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.fvpai4: //HIDE HIDDEN FILES
-
+                MenuItem menuItem = menu.findItem(R.id.fvpai4);
+                    if (HIDE_HIDDEN)  {
+                        HIDE_HIDDEN = false;
+                        menuItem.setTitle("Hide hidden files");
+                    }
+                    else {
+                        HIDE_HIDDEN = true;
+                        menuItem.setTitle("Show hidden files");
+                    }
+                    changeMenu(CURRENT_DIR);
+                    loadArr(CURRENT_DIR.toString());
+                    arrayAdapter.notifyDataSetChanged();
                 break;
             case R.id.fvpai5: //ABOUT FANAGER
                 Intent intent = new Intent(getApplicationContext(), AboutAppActivity.class);
@@ -296,17 +304,27 @@ public class FileViewActivity extends AppCompatActivity {
 
     private void loadArr(String path) { //`loadArr(String path)` method is used to reload the `files` array
         file = new File(path); //reload `file` variable
-
+        Log.d(LOG_TAG, "Hide: " + HIDE_HIDDEN);
         if (file.isDirectory()) { //WE NEED MORE SAFETY!!!
             if (!alfiles.isEmpty()) alfiles.clear(); //Yes! It looks oddly, but inoffensively
             if (file.list() != null) { //FOREACH, BABY!!!
                 for (String item : file.list()) {
                     hmfiles = new HashMap<String, Object>();
-                    hmfiles.put("item", item);
-                    if (file.toString().equals("/")) hmfiles.put("type" ,new File(file.toString() + item).isDirectory()?R.drawable.directory:R.drawable.file);
-                    else hmfiles.put("type", new File(file.toString() + "/" + item).isDirectory()?R.drawable.directory:R.drawable.file);
-
-                    alfiles.add(hmfiles);
+                    if (file.toString().equals("/")) {
+                        if (!(HIDE_HIDDEN && new File(new File(file.toString()) + item).isHidden())) {
+                            hmfiles.put("item", item);
+                            hmfiles.put("type" ,new File(file.toString() + item).isDirectory()?R.drawable.directory:R.drawable.file);
+                            alfiles.add(hmfiles);
+                        }
+                    }
+                    else {
+                        if (!(HIDE_HIDDEN && new File(new File(file.toString()) + item).isHidden())) {
+                            hmfiles.put("item", item);
+                            hmfiles.put("type", new File(file.toString() + "/" + item).isDirectory() ? R.drawable.directory : R.drawable.file);
+                            alfiles.add(hmfiles);
+                        }
+                    }
+                   // alfiles.add(hmfiles);  //Now turn it off
                 }
                 changeMenu(file);
                 CURRENT_DIR = file;

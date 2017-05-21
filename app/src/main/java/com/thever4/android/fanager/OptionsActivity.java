@@ -2,10 +2,12 @@ package com.thever4.android.fanager;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -40,4 +42,32 @@ public class OptionsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+    public void goInternal(View view) {
+        Intent intent = new Intent(getApplicationContext(), FileViewActivity.class);
+        intent.putExtra("CURRENT_DIR", "/sdcard");
+        startActivity(intent);
+        /*overridePendingTransition(R.anim.slide, R.anim.alpha);*/
+        finish();
+    }
+
+    public void  goExternal(View view) {
+        Intent intent = new Intent(getApplicationContext(), FileViewActivity.class);
+        intent.putExtra("CURRENT_DIR", Environment.getExternalStorageDirectory().toString());
+        startActivity(intent);
+        /*overridePendingTransition(R.anim.slide, R.anim.alpha);*/
+        finish();
+    }
+
+    public void goFSRoot(View view) {
+        Intent intent = new Intent(getApplicationContext(), FileViewActivity.class);
+        /*intent.putExtra("CURRENT_DIR", null);*/
+        startActivity(intent);
+        /*overridePendingTransition(R.anim.slide, R.anim.alpha);*/
+        finish();
+    }
+
 }
