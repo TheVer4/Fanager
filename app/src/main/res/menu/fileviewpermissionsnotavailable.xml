@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/fvpaii1"
+        android:title="Go to main" />
+
     <item
         android:id="@+id/fvpai4"
         android:title="Show hidden files" />

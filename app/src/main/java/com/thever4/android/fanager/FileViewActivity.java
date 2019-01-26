@@ -135,6 +135,11 @@ public class FileViewActivity extends AppCompatActivity {
             /*case R.id.fvpai1: //SELECT
 
                 break;*/
+            case R.id.fvpaii1:
+                Intent intentOptions = new Intent(getApplicationContext(), OptionsActivity.class);
+                startActivity(intentOptions);
+                finish();
+                break;
             case R.id.fvpai2: //NEW FILE
                 try {
                     if (CURRENT_DIR.isDirectory()) {
@@ -159,7 +164,7 @@ public class FileViewActivity extends AppCompatActivity {
                                 ENTERED_FILENAME = input.getText().toString();
                                 try {
                                     if (ENTERED_FILENAME != null && !ENTERED_FILENAME.trim().equals("")) {
-                                        new File(CURRENT_DIR.toString() + "/" + ENTERED_FILENAME).createNewFile();
+                                        new File(CURRENT_DIR.toString() + "/" + ENTERED_FILENAME.trim()).createNewFile();
                                         loadArr(CURRENT_DIR.toString());
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Empty filename", Toast.LENGTH_SHORT).show();
@@ -206,7 +211,7 @@ public class FileViewActivity extends AppCompatActivity {
                                 ENTERED_FILENAME = input.getText().toString();
                                 try {
                                     if (ENTERED_FILENAME != null && !ENTERED_FILENAME.trim().equals("")) {
-                                        new File(CURRENT_DIR.toString() + "/" + ENTERED_FILENAME).mkdir();
+                                        new File(CURRENT_DIR.toString() + "/" + ENTERED_FILENAME.trim()).mkdir();
                                         loadArr(CURRENT_DIR.toString());
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Empty directory name", Toast.LENGTH_SHORT).show();
@@ -275,7 +280,7 @@ public class FileViewActivity extends AppCompatActivity {
     }
 
     private void exit() { //exit() method to go out the application. It used that "BACK" key is reassigned
-        if (back_pressed + 2000 > System.currentTimeMillis() && CURRENT_DIR.toString().equals("/")) /*super.onBackPressed();*/ exit(); //Genius!!!!!!
+        if (back_pressed + 2000 > System.currentTimeMillis() && CURRENT_DIR.toString().equals("/")) /*super.onBackPressed();*/ finish(); //Genius!!!!!!
         else Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
         back_pressed = System.currentTimeMillis(); //no more! Its so fun :D
     }

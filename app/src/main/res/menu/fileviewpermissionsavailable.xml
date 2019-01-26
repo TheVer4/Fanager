@@ -3,7 +3,11 @@
 
     <!--<item
         android:id="@+id/fvpai1"
-        android:title="Select" />--> <!-- USED IN OLD VERSIONS. NOW IT DELETED -->
+        android:title="Select" />--> <!-- USED IN OLD VERSIONS. NOW IT DELETED AND USED TO GO INTO OPTIONS ACTIVITY. USEFUL :D -->
+
+    <item
+        android:id="@+id/fvpaii1"
+        android:title="Go to main" />
 
     <item
         android:id="@+id/fvpai2"
